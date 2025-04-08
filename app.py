@@ -1,18 +1,29 @@
 import os
-from flask import Flask, request, render_template
+import streamlit as st
 from models.recommender import AssessmentRecommender
 
-app = Flask(__name__)
-recommender = AssessmentRecommender()
+# ✅ Correct way to load the API key from environment
+GOOGLE_API_KEY = os.getenv("AIzaSyBIXhp0hS8EqqFTD301_17VADbMcFHB7DA")
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    results = []
-    if request.method == 'POST':
-        query = request.form['query']
+if not GOOGLE_API_KEY:
+    st.error("Missing Google API Key. Please add it in Streamlit Cloud Secrets.")
+    st.stop()
+
+# Initialize recommender
+recommender = AssessmentRecommender(api_key=GOOGLE_API_KEY)
+
+# UI
+st.title("SHL Assessment Recommendation")
+query = st.text_area("Enter a job description or query:")
+
+if st.button("Get Recommendations"):
+    if query.strip():
         results = recommender.get_recommendations(query)
-    return render_template('index.html', results=results)
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # Default to 10000 if PORT is not set
-    app.run(host="0.0.0.0", port=port)
+        if results:
+            st.subheader("Top Recommendations:")
+            for item in results:
+                st.markdown(f"- **{item}**")
+        else:
+            st.warning("No recommendations found.")
+    else:
+        st.warning("Please enter a valid query.")
