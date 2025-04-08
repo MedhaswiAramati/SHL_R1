@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SHL Assessment Recommender</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 80px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        input[type="text"] {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .assessment {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .assessment h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+        .assessment p {
+            margin: 0 0 10px;
+        }
+        .assessment a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .assessment a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 SHL Assessment Recommender</h1>
+        <form method="POST">
+            <input type="text" name="query" placeholder="Enter job role or description..." required>
+            <button type="submit">Recommend Assessments</button>
+        </form>
+
+        {% if results %}
+        <div class="results">
+            <h2>Recommended Assessments:</h2>
+            {% for title, description, url in results %}
+            <div class="assessment">
+                <h3>{{ title }}</h3>
+                <p>{{ description }}</p>
+                <a href="{{ url }}" target="_blank">🔗 View SHL Test</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
